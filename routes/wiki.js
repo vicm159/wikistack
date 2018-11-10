@@ -8,9 +8,19 @@ router.get('/', (req, res) => {
   res.send(main(''));
 });
 
-router.post('/', (req, res) => {
-  console.log(req.body);
-  let title = req.body.authorname;
+router.post('/', async (req, res, next) => {
+  const page = new Page({
+    title: req.body.title,
+    content: req.body.content,
+  });
+  console.log(page);
+  try {
+    await page.save();
+    res.redirect('/');
+  } catch (error) {
+    next(error);
+  }
+
   res.json(req.body);
 });
 
